@@ -138,7 +138,7 @@ const DATA: Trade[] = [
 function App() {
   return (
     <div className="w-screen h-screen flex items-center justify-center p-4">
-      <Card className="h-full w-full p-4 xl:p-12 max-w-[1200px] overflow-auto">
+      <Card className="h-full w-full p-4 xl:p-12 max-w-[1200px]">
         <h1 className="text-xl font-semibold">Add Trade</h1>
 
         <div className="flex items-center mt-4 gap-4">
