@@ -1,4 +1,4 @@
-import { Award, BarChart4, CandlestickChart } from "lucide-react"
+import { Award, CandlestickChart } from "lucide-react"
 
 import { Skeleton } from "@/components/ui/skeleton"
 import { DataTable } from "./data-table/data-table"
@@ -35,98 +35,6 @@ const DATA2 = [
   { name: 'D', value: 25, color: '#00FF00' }, // Dark Gray
 ];
 
-const DATA: Trade[] = [
-  {
-    id: "124",
-    exchange: "NASDAQ",
-    market: "AAPL",
-    stopSize: 15,
-    risk: 1.5,
-    tradeStatus: "Awaiting Fill",
-    position: "long",
-    plusMinus: 0
-  },
-  {
-    id: "125",
-    exchange: "NYSE",
-    market: "IBM",
-    stopSize: 12,
-    risk: 1.8,
-    tradeStatus: "Completed idk",
-    position: "short",
-    plusMinus: -50
-  },
-  {
-    id: "126",
-    exchange: "LSE",
-    market: "BP",
-    stopSize: 8,
-    risk: 1.2,
-    tradeStatus: "Awaiting Fill",
-    position: "long",
-    plusMinus: 10
-  },
-  {
-    id: "127",
-    exchange: "NYSE",
-    market: "TSLA",
-    stopSize: 20,
-    risk: 2.5,
-    tradeStatus: "Completed idk",
-    position: "long",
-    plusMinus: 80
-  },
-  {
-    id: "128",
-    exchange: "BSE",
-    market: "INFY",
-    stopSize: 9,
-    risk: 1.1,
-    tradeStatus: "Awaiting Fill",
-    position: "short",
-    plusMinus: -15
-  },
-  {
-    id: "129",
-    exchange: "ASX",
-    market: "CBA",
-    stopSize: 18,
-    risk: 2.2,
-    tradeStatus: "Completed idk",
-    position: "long",
-    plusMinus: 30
-  },
-  {
-    id: "130",
-    exchange: "NASDAQ",
-    market: "GOOGL",
-    stopSize: 22,
-    risk: 2.8,
-    tradeStatus: "Awaiting Fill",
-    position: "long",
-    plusMinus: 5
-  },
-  {
-    id: "131",
-    exchange: "LSE",
-    market: "HSBA",
-    stopSize: 10,
-    risk: 1.3,
-    tradeStatus: "Completed idk",
-    position: "short",
-    plusMinus: -20
-  },
-  {
-    id: "132",
-    exchange: "NYSE",
-    market: "AMZN",
-    stopSize: 16,
-    risk: 1.7,
-    tradeStatus: "Awaiting Fill",
-    position: "long",
-    plusMinus: 15
-  }
-];
 
 export interface Data {
   currentBalance: number,
@@ -196,7 +104,7 @@ function App() {
             <CardTitle className='text-sm font-normal'>
               <div className='flex justify-between items-center'>
                 <p>Total Balance</p>
-                <CandlestickChart size={16} className="text-primary" />
+                <CandlestickChart size={16} />
               </div>
             </CardTitle>
           </CardHeader>

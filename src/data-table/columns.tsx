@@ -10,7 +10,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Ban, Check, Pen } from "lucide-react"
+import { Check, Pen } from "lucide-react"
 import DeleteTrade from "@/components/trades/trade-controls/DeleteTrade"
 
 export type Trade = {
@@ -54,7 +54,7 @@ export const columns: ColumnDef<Trade>[] = [
   },
   {
     accessorKey: "plusMinus",
-    header: "+ | -",
+    header: "+/-",
   },
   {
     id: "actions",

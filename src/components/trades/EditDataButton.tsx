@@ -9,9 +9,9 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Input } from "../ui/input"
-import { BarChart2, Database, User } from "lucide-react"
+import { BarChart2 } from "lucide-react"
 import { useEffect, useState } from "react"
-import {Data} from "../../App"
+import { Data } from "../../App"
 import { Skeleton } from "../ui/skeleton"
 import { useToast } from "@/components/ui/use-toast"
 import { doc, setDoc } from "firebase/firestore"
