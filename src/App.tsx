@@ -1,28 +1,40 @@
-import { Button } from "./components/ui/button"
-import { Atom, Award, BarChart4, Plus } from "lucide-react"
-import { Card } from "./components/ui/card"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Award, BarChart4, DollarSign } from "lucide-react"
 
-import { Input } from "./components/ui/input"
+import { Skeleton } from "@/components/ui/skeleton"
 import { DataTable } from "./data-table/data-table"
 
 import { Trade, columns } from "./data-table/columns";
+import { useEffect, useState } from "react"
+import { doc, getDoc, onSnapshot } from "firebase/firestore"
+import { db } from "./firebase/config"
+import AddTradeButton from "./components/trades/AddTradeButton"
+import EditDataButton from "./components/trades/EditDataButton";
+import { to2dp } from "./lib/utils";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+
+import NeedlePieChart from "./components/trades/NeedlePieChart";
+
+const DATA1 = [
+  { name: 'A', value: 25, color: '#eeeeee' }, // White
+  { name: 'B', value: 25, color: '#cccccc' }, // Light Gray
+  { name: 'C', value: 25, color: '#999999' }, // Medium Gray
+  { name: 'D', value: 25, color: '#666666' }, // Dark Gray
+];
+
+const DATA2 = [
+  { name: 'A', value: 25, color: '#FF0000' }, // White
+  { name: 'B', value: 25, color: '#FF8000' }, // Light Gray
+  { name: 'C', value: 25, color: '#80FF00' }, // Medium Gray
+  { name: 'D', value: 25, color: '#00FF00' }, // Dark Gray
+];
 
 const DATA: Trade[] = [
   {
@@ -135,133 +147,120 @@ const DATA: Trade[] = [
   }
 ];
 
+export interface Data {
+  currentBalance: number,
+  target: number,
+}
+
 function App() {
+
+  const [data, setData] = useState<Data | null>(null);
+
+  useEffect(() => {
+    //data
+    const unsub = onSnapshot(doc(db, "data", "1"), ((doc: any) => {
+      setData(doc.data());
+    }))
+
+    return () => {
+      unsub();
+    }
+  }, [])
+
   return (
-      <Card className="min-h-full m-4 p-4 xl:p-12 max-w-[1200px]">
-        <h1 className="text-xl font-semibold">Add Trade</h1>
+    <Card className="min-h-full m-4 p-4 xl:p-12 max-w-[1200px]">
 
-        <div className="flex items-center mt-4 gap-4">
-          <AlertDialog>
-            <AlertDialogTrigger className="p-2 rounded-md bg-primary"><Plus color="white"/></AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle className="mb-4">Add New Trade</AlertDialogTitle>
+      <div className="flex justify-between">
+        <div className="mr-16">
+          <h1 className="text-xl font-semibold">Add Trade</h1>
 
-                <div className="flex gap-4 items-center">
-                  <h2 className="w-32">
-                    Market
-                  </h2>
-                  <Select>
-                    <SelectTrigger className="flex-1">
-                      <SelectValue placeholder="Market" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1">1</SelectItem>
-                      <SelectItem value="2">2</SelectItem>
-                      <SelectItem value="3">3</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+          <div className="flex items-center mt-4 gap-4">
 
-                <div className="flex gap-4 items-center">
-                  <h2 className="flex items-center w-32">
-                    Trade Strategy <BarChart4 size={16} color="#7CBA68" className="ml-1" />
-                  </h2>
+            <AddTradeButton />
 
-                  <Select>
-                    <SelectTrigger className="flex-1">
-                      <SelectValue placeholder="Strategy" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1">1</SelectItem>
-                      <SelectItem value="2">2</SelectItem>
-                      <SelectItem value="3">3</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+            <EditDataButton data={data} />
 
-                <div className="flex gap-4 items-center">
-                  <h2 className=" w-32">
-                    Stop Size (prices)
-                  </h2>
-                  <Input className="flex-1" type="number" name="quantity" min="0" step="1" />
-                </div>
-
-                <div className="flex gap-4 items-center">
-                  <h2 className=" w-32">
-                    A/B/C Rating
-                  </h2>
-                  <Select>
-                    <SelectTrigger className="flex-1">
-                      <SelectValue placeholder="A/B/C" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="A">A</SelectItem>
-                      <SelectItem value="B">B</SelectItem>
-                      <SelectItem value="C">C</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-              </AlertDialogHeader>
-              <AlertDialogFooter className="mt-4">
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Add</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-
-          <Button variant={"secondary"} className="aspect-square w-10 h-10 p-2"><Atom/></Button>
-        </div>
-
-        <div className="mt-4 flex overflow-auto">
-          <DataTable columns={columns} data={DATA}></DataTable>
-          <div className="px-2 ml-2 flex-1 bg-gray-200">
-            <p>Trade Controls</p>
-            <p className="text-gray-400"><i>todo</i></p>
           </div>
         </div>
 
-        <div className="mt-4 flex items-center gap-2">
-          <div className="flex-1 h-2 rounded-full bg-gray-200" />
-          <p className="flex items-center"><Award className="mr-1" size={20} strokeWidth={1.8} /> $75.00</p>
+        <Card className="flex-1 max-w-[300px]">
+          <CardHeader>
+            <CardTitle className='text-sm font-normal'>
+              <div className='flex justify-between items-center'>
+                <p>Total Balance</p>
+                <BarChart4 size={16} className="text-primary"/>
+              </div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className='text-2xl -mt-5 font-semibold text-primary'>${data?.currentBalance}</p>
+          </CardContent>
+        </Card>
+      </div>
+
+
+      <div className="mt-4 flex overflow-auto">
+        <DataTable columns={columns} data={DATA}></DataTable>
+        <div className="px-2 ml-2 flex-1 bg-secondary">
+          <p>Trade Controls</p>
+          <p className="text-gray-400"><i>todo</i></p>
         </div>
+      </div>
 
-        <div className="flex-col md:flex mt-4 gap-4">
-          <Card className="p-4 text-sm w-full md:w-64 items-center">
-            <div className="flex gap-4 mb-2">
-              <p className="  w-36">Realised P & L</p>
-              <p className="  w-12 text-center">$0.00</p>
-            </div>
+      <div className="mt-4 flex items-center gap-2">
+        <div className="flex-1 h-2 rounded-full bg-gray-200" />
+        <div className="flex items-center w-24 h-2"><Award className="mr-1" size={20} strokeWidth={1.8} /> {data ? <p>${to2dp(data.target)}</p> : <Skeleton className="flex-1 h-[20px] rounded-full" />}</div>
+      </div>
 
-            <div className="flex gap-4 mb-2">
-              <p className="  w-36">Price Accumulator</p>
-              <p className="  w-12 text-center">0</p>
-            </div>
+      <div className="flex flex-col md:flex-row mt-4 gap-4">
+        <Card className="p-4 text-sm w-full md:w-64 items-center flex-1">
+          <div className="flex gap-4 mb-2">
+            <p className="  w-36">Realised P & L</p>
+            <p className="  w-12 text-center">$0.00</p>
+          </div>
 
-            <div className="flex gap-4 mb-2">
-              <p className="  w-36">Price Accumulator</p>
-              <p className="  w-12 text-center">$0.00</p>
-            </div>
+          <div className="flex gap-4 mb-2">
+            <p className="  w-36">Price Accumulator</p>
+            <p className="  w-12 text-center">0</p>
+          </div>
 
-            <div className="flex gap-4 mb-2">
-              <p className="  w-36">Price Accumulator</p>
-              <p className="  w-12 text-center">0</p>
-            </div>
+          <div className="flex gap-4 mb-2">
+            <p className="  w-36">Allocated Risk</p>
+            <p className="  w-12 text-center">$0.00</p>
+          </div>
 
-          </Card>
+          <div className="flex gap-4 mb-2">
+            <p className="  w-36">Trade Count</p>
+            <p className="  w-12 text-center">0</p>
+          </div>
+
+        </Card>
+
+        <Card className="md:w-56 flex-1 flex flex-col items-center justify-center p-4">
+          <NeedlePieChart data={DATA1}/>
+          <h3 className="font-semibold">Available Risk</h3>
+          <h3 className="font-semibold">$xx.xx</h3>
+        </Card>
+
+        <Card className="md:w-56 flex-1 flex flex-col items-center justify-center p-4">
+          <NeedlePieChart data={DATA1}/>
+          <h3 className="font-semibold">Win Ratio</h3>
+          <h3 className="font-semibold">100%</h3>
+        </Card>
+
+        <Card className="md:w-56 flex-1 flex flex-col items-center justify-center p-4">
+          <NeedlePieChart data={DATA2}/>
+          <h3 className="font-semibold">P & L</h3>
+          <h3 className="font-semibold">$xx.xx</h3>
+        </Card>
+
+        
+
+      </div>
 
 
-          <Card className="flex-1 flex items-center mt-4 md:mt-0 p-2">
-            <div className="p-2 rounded flex-1 bg-gray-200 h-3/4">
-              <p>Other graph stuff</p>
-              <p className="text-gray-400"><i>todo</i></p>
-            </div>
-          </Card>
 
-        </div>
-
-      </Card>
+    </Card>
 
 
   )
