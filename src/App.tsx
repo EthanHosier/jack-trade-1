@@ -207,29 +207,31 @@ function App() {
         </div>
       </div>
 
-      <div className="mt-4 flex items-center gap-2">
-        <div className="flex-1 h-2 rounded-full bg-gray-200" />
+      <div className="mt-8 flex items-center gap-2">
+        <div className="flex-1 h-2 rounded-full bg-secondary">
+          <div className="h-full bg-primary w-[75%] rounded-full"/>
+        </div>
         <div className="flex items-center w-24 h-2"><Award className="mr-1" size={20} strokeWidth={1.8} /> {data ? <p>${to2dp(data.target)}</p> : <Skeleton className="flex-1 h-[20px] rounded-full" />}</div>
       </div>
 
-      <div className="flex flex-col md:flex-row mt-4 gap-4">
+      <div className="flex flex-col md:flex-row mt-8 gap-4">
         <Card className="p-4 text-sm w-full md:w-64 items-center flex-1">
-          <div className="flex gap-4 mb-2">
+          <div className="flex gap-4 mb-2 justify-center">
             <p className="  w-36">Realised P & L</p>
             <p className="  w-12 text-center">$0.00</p>
           </div>
 
-          <div className="flex gap-4 mb-2">
+          <div className="flex gap-4 mb-2 justify-center">
             <p className="  w-36">Price Accumulator</p>
             <p className="  w-12 text-center">0</p>
           </div>
 
-          <div className="flex gap-4 mb-2">
+          <div className="flex gap-4 mb-2 justify-center">
             <p className="  w-36">Allocated Risk</p>
             <p className="  w-12 text-center">$0.00</p>
           </div>
 
-          <div className="flex gap-4 mb-2">
+          <div className="flex gap-4 mb-2 justify-center">
             <p className="  w-36">Trade Count</p>
             <p className="  w-12 text-center">0</p>
           </div>
