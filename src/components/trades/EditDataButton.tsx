@@ -9,7 +9,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Input } from "../ui/input"
-import { Database } from "lucide-react"
+import { BarChart2, Database, User } from "lucide-react"
 import { useEffect, useState } from "react"
 import {Data} from "../../App"
 import { Skeleton } from "../ui/skeleton"
@@ -80,7 +80,7 @@ const EditDataButton = ({data}: {data: Data | null }) => {
       data ? 
 
       <AlertDialog>
-      <AlertDialogTrigger className="p-2 rounded-md bg-secondary"><Database/></AlertDialogTrigger>
+      <AlertDialogTrigger className="p-2 rounded-md bg-secondary"><BarChart2/></AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="mb-4">Edit Data</AlertDialogTitle>

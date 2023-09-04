@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { BarChart4, Plus } from "lucide-react"
+import { Plus } from "lucide-react"
 import { Input } from "../ui/input"
 import { MARKETS } from "@/lib/constants"
 import { useState } from "react"
@@ -26,7 +26,7 @@ import { useToast } from "@/components/ui/use-toast"
 
 
 const AddTradeButton = () => {
-  const [stockSize, setstockSize] = useState<string>('');
+  const [stopSize, setstopSize] = useState<string>('');
   const [market, setMarket] = useState<"ES" | "MES">("ES");
 
   const handleInputChange = (event: any) => {
@@ -38,7 +38,7 @@ const AddTradeButton = () => {
 
     if (validNumberRegex.test(newValue)) {
       // The input is a valid number, update the state
-      setstockSize(newValue);
+      setstopSize(newValue);
     }
   };
 
@@ -48,7 +48,7 @@ const AddTradeButton = () => {
   //create new trade
   const onSubmit = () => {
     addDoc(collection(db, "trades"), {
-      stockSize: Number(stockSize),
+      stopSize: Number(stopSize),
       market,
       status: "Awaiting Fill",
     }).then(() =>
@@ -68,7 +68,7 @@ const AddTradeButton = () => {
   }
 
   const reset = () => {
-    setstockSize("");
+    setstopSize("");
   }
 
   return (
@@ -98,7 +98,7 @@ const AddTradeButton = () => {
             <h2 className=" w-32">
               Stop Size (Prices)
             </h2>
-            <Input className="flex-1" type="text" name="quantity" value={stockSize} onChange={handleInputChange} />
+            <Input className="flex-1" type="text" name="quantity" value={stopSize} onChange={handleInputChange} />
           </div>
 
 
@@ -106,7 +106,7 @@ const AddTradeButton = () => {
         </AlertDialogHeader>
         <AlertDialogFooter className="mt-4">
           <AlertDialogCancel onClick={reset}>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onSubmit} disabled={!stockSize}>Add</AlertDialogAction>
+          <AlertDialogAction onClick={onSubmit} disabled={!stopSize}>Add</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
