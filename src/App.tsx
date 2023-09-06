@@ -196,9 +196,9 @@ function App() {
 
       <div className="mt-8 flex items-center gap-2">
         <div className="flex-1 h-2 rounded-full bg-secondary">
-          {data && data.profitLoss > 0 && <div className="h-full bg-primary rounded-full" style={{ width: `${Math.min(100, data.profitLoss * 100 / data.target)}%` }} />}
+          {data && data.profitLoss > 0 && <div className="h-full bg-primary/80 rounded-full" style={{ width: `${Math.min(100, data.profitLoss * 100 / data.target)}%` }} />}
         </div>
-        <div className="flex items-center w-24 h-2"><Award className="mr-1" size={20} strokeWidth={1.8} /> {data ? <p>${to2dp(data.target)}</p> : <Skeleton className="flex-1 h-[20px] rounded-full" />}</div>
+        <div className="flex items-center w-24 h-2 text-primary/80"><Award className="mr-1" size={20} strokeWidth={1.8} /> {data ? <p>${to2dp(data.target)}</p> : <Skeleton className="flex-1 h-[20px] rounded-full" />}</div>
       </div>
 
       <div className="flex flex-col md:flex-row mt-8 gap-4">
