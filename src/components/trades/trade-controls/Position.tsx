@@ -41,13 +41,13 @@ const Position = ({id}: {id: string}) => {
     .then(() => {
       toast({
         title: "Position added",
-        description: "Successfully added new position"
+        description: "Successfully added new position."
       })
     })
     .catch(() => {
       toast({
-        title: "Uh Oh! Something went wrong,",
-        description: "Error adding new position",
+        title: "Uh Oh! Something went wrong.",
+        description: "Error adding new position.",
       })
     });
   }

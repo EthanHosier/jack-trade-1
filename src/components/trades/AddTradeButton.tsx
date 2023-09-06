@@ -27,7 +27,7 @@ import { useToast } from "@/components/ui/use-toast"
 
 const AddTradeButton = () => {
   const [stopSize, setstopSize] = useState<string>('');
-  const [market, setMarket] = useState<"ES" | "MES">("ES");
+  const [market, setMarket] = useState<"ES" | "MES">(MARKETS[0].name);
 
   const handleInputChange = (event: any) => {
     const newValue = event.target.value;
@@ -53,12 +53,12 @@ const AddTradeButton = () => {
     }).then(() =>
       toast({
         title: "Trade Added",
-        description: "Successfully added new trade",
+        description: "Successfully added new trade.",
       })
     ).catch(() => {
       toast({
         title: "Uh Oh! Something went wrong,",
-        description: "Error adding new trade",
+        description: "Error adding new trade.",
         variant: "destructive",
       })
     })

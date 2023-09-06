@@ -23,12 +23,12 @@ const DeleteTrade = ({ id }: { id: string }) => {
       .then(() =>
         toast({
           title: "Trade Deleted",
-          description: "Successfully deleted trade",
+          description: "Successfully deleted trade.",
         })
       ).catch(() => {
         toast({
-          title: "Uh Oh! Something went wrong,",
-          description: "Error deleting trade",
+          title: "Uh Oh! Something went wrong",
+          description: "Error deleting trade.",
           variant: "destructive",
         })
       })

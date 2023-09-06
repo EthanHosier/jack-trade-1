@@ -86,7 +86,7 @@ const EditDataButton = ({data}: {data: Data | null }) => {
       })
     ).catch(() => {
       toast({
-        title: "Uh Oh! Something went wrong,",
+        title: "Uh Oh! Something went wrong.",
         description: "Error updating account data.",
         variant:"destructive",
       })

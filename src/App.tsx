@@ -167,7 +167,7 @@ function App() {
             <CardHeader>
               <CardTitle className='text-sm font-normal'>
                 <div className='flex justify-between items-center'>
-                  <p className="text-primary/70">Total Risk</p>
+                  <p className="text-primary/70">Total Daily Risk</p>
                   <CandlestickChart size={16} className="text-primary/70"/>
                 </div>
               </CardTitle>

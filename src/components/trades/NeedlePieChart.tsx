@@ -1,3 +1,4 @@
+import { boundInclusive } from '@/lib/utils';
 import { PureComponent } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
 
@@ -54,6 +55,7 @@ export default class Example extends PureComponent<PieChartProps> {
   render() {
     const { data, needleValue, needleColor } = this.props;
     
+    const nv = boundInclusive(needleValue, 0,100);
 
     return (
       <PieChart width={150} height={80}>
@@ -73,7 +75,7 @@ export default class Example extends PureComponent<PieChartProps> {
             <Cell key={`cell-${index}`} fill={entry.color} />
           ))}
         </Pie>
-        {needle(needleValue, needleColor)}
+        {needle(nv, needleColor)}
       </PieChart>
     );
   }
