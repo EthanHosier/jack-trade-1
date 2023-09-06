@@ -93,7 +93,7 @@ function App() {
           exchange: foundExchangeObj?.exchange ?? "",
           market: data.market,
           stopSize: data.stopSize,
-          risk: 0,
+          risk: data.risk,
           tradeStatus: data.position ? "Live" : "Awaiting Fill",
           position: data.position ?? "",
           plusMinus: 0,
@@ -136,7 +136,7 @@ function App() {
 
           <div className="flex items-center mt-4 gap-4">
 
-            <AddTradeButton />
+            <AddTradeButton maxRiskPerTrade={data?.maxRiskPerTrade}/>
             <EditDataButton data={data} />
             <ModeToggle/>
 

@@ -16,7 +16,6 @@ import { to2dp } from '@/lib/utils'
 import { deleteDoc, doc, increment, updateDoc } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 import { toast } from '@/components/ui/use-toast'
-import { Description } from '@radix-ui/react-dialog'
 const ProfitLoss = ({numOfContracts, tickSize, id}:{numOfContracts: number, tickSize: number, id: string}) => {
 
   const [pricesWinLoss, setPricesWinLoss] = useState<string>("");
