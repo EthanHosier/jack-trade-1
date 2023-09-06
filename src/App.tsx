@@ -1,4 +1,4 @@
-import { Award, Banknote, CandlestickChart, DollarSign } from "lucide-react"
+import { Award, CandlestickChart, DollarSign } from "lucide-react"
 
 import { Skeleton } from "@/components/ui/skeleton"
 import { DataTable } from "./data-table/data-table"
@@ -200,7 +200,7 @@ function App() {
 
                 <div className="flex gap-4 mb-2 justify-center">
                   <p className="  w-36">Allocated Risk</p>
-                  <p className="  w-12 text-center">${allocatedRisk}</p>
+                  <p className="  w-12 text-center">${to2dp(allocatedRisk ?? 0)}</p>
                 </div>
 
                 <div className="flex gap-4 mb-2 justify-center">
