@@ -131,7 +131,7 @@ function App() {
     <Card className="min-h-full m-4 p-4 xl:p-8 max-w-[1200px] lg:mx-auto">
 
       <div className="flex justify-between">
-        <div className="mr-16">
+        <div className="mr-4">
           <h1 className="text-xl font-semibold">Trade Tracker</h1>
 
           <div className="flex items-center mt-4 gap-4">

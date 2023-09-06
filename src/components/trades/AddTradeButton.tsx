@@ -23,7 +23,6 @@ import { addDoc, collection } from "firebase/firestore"
 import { db } from "@/firebase/config"
 
 import { useToast } from "@/components/ui/use-toast"
-import { useTheme } from "../theme-provider"
 
 
 const AddTradeButton = () => {
@@ -71,7 +70,6 @@ const AddTradeButton = () => {
     setstopSize("");
   }
 
-  const { theme } = useTheme();
 
   return (
     <AlertDialog>
