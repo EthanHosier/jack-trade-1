@@ -21,6 +21,11 @@ import {
 import NeedlePieChart from "./components/trades/NeedlePieChart";
 import { MARKETS } from "./lib/constants";
 import ResetProfitLossButton from "./components/trades/ResetProfitLossButton";
+import ModeToggle from "./components/ModeToggle";
+import { useTheme } from "./components/theme-provider";
+
+const needleDark = "#dddddd";
+const needleLight = "#000000";
 
 const DATA1 = [
   { name: 'A', value: 25, color: '#eeeeee' }, // White
@@ -30,12 +35,25 @@ const DATA1 = [
 ];
 
 const DATA2 = [
-  { name: 'A', value: 25, color: '#FF0000' }, // White
-  { name: 'B', value: 25, color: '#FF8000' }, // Light Gray
-  { name: 'C', value: 25, color: '#80FF00' }, // Medium Gray
-  { name: 'D', value: 25, color: '#00FF00' }, // Dark Gray
+  { name: 'A', value: 25, color: '#FF0000' }, 
+  { name: 'B', value: 25, color: '#FF8000' }, 
+  { name: 'C', value: 25, color: '#80FF00' }, 
+  { name: 'D', value: 25, color: '#00FF00' }, 
 ];
 
+const DATA1Dark = [
+  { name: 'A', value: 25, color: '#333333' }, // Dark Gray (Text)
+  { name: 'B', value: 25, color: '#555555' }, // Gray
+  { name: 'C', value: 25, color: '#777777' }, // Light Gray
+  { name: 'D', value: 25, color: '#999999' }, // Lighter Gray
+];
+
+const DATA2Dark = [
+  { name: 'A', value: 25, color: '#CC0000' }, // Dark Red
+  { name: 'B', value: 25, color: '#FF6600' }, // Dark Orange
+  { name: 'C', value: 25, color: '#66CC00' }, // Dark Yellowish Green
+  { name: 'D', value: 25, color: '#009900' }, // Dark Green
+];
 
 export interface Data {
   currentBalance: number,
@@ -49,6 +67,7 @@ export interface Data {
 }
 
 function App() {
+  const {theme} = useTheme();
 
   const [data, setData] = useState<Data | null>(null);
   const [trades, setTrades] = useState<Trade[] | null>(null);
@@ -118,8 +137,8 @@ function App() {
           <div className="flex items-center mt-4 gap-4">
 
             <AddTradeButton />
-
             <EditDataButton data={data} />
+            <ModeToggle/>
 
           </div>
         </div>
@@ -129,8 +148,8 @@ function App() {
             <CardHeader>
               <CardTitle className='text-sm font-normal'>
                 <div className='flex justify-between items-center'>
-                  <p>Total Balance</p>
-                  <DollarSign size={16} />
+                  <p className="text-primary/70">Total Balance</p>
+                  <DollarSign size={16} className="text-primary/70"/>
                 </div>
               </CardTitle>
             </CardHeader>
@@ -148,8 +167,8 @@ function App() {
             <CardHeader>
               <CardTitle className='text-sm font-normal'>
                 <div className='flex justify-between items-center'>
-                  <p>Total Risk</p>
-                  <CandlestickChart size={16} />
+                  <p className="text-primary/70">Total Risk</p>
+                  <CandlestickChart size={16} className="text-primary/70"/>
                 </div>
               </CardTitle>
             </CardHeader>
@@ -211,20 +230,20 @@ function App() {
               </Card>
 
               <Card className="md:w-56 flex-1 flex flex-col items-center justify-center p-4">
-                <NeedlePieChart data={DATA1} needleValue={100 * (data.currentBalance * data.percentDailyRisk / 100 - (allocatedRisk ?? 0)) / (data.currentBalance * data.percentDailyRisk / 100)} />
-                <h3 className="font-semibold">Available Risk</h3>
+                <NeedlePieChart data={theme == "dark" ? DATA1Dark : DATA1} needleColor={theme == "dark" ? needleDark : needleLight} needleValue={100 * (data.currentBalance * data.percentDailyRisk / 100 - (allocatedRisk ?? 0)) / (data.currentBalance * data.percentDailyRisk / 100)} />
+                <h3 className="font-semibold text-sm">Available Risk</h3>
                 <h3 className="font-semibold">${to2dp(data.currentBalance * data.percentDailyRisk / 100 - (allocatedRisk ?? 0))}</h3>
               </Card>
 
               <Card className="md:w-56 flex-1 flex flex-col items-center justify-center p-4">
-                <NeedlePieChart data={DATA1} needleValue={data.losses || data.wins ? data.wins * 100 / (data.wins + data.losses) : 100} />
-                <h3 className="font-semibold">Win Ratio</h3>
+                <NeedlePieChart data={theme=="dark" ? DATA1Dark : DATA1} needleColor={theme == "dark" ? needleDark : needleLight} needleValue={data.losses || data.wins ? data.wins * 100 / (data.wins + data.losses) : 100} />
+                <h3 className="font-semibold text-sm">Win Ratio</h3>
                 <h3 className="font-semibold">{data.losses || data.wins ? to2dp(data.wins * 100 / (data.wins + data.losses)) : 100}%</h3>
               </Card>
 
               <Card className="md:w-56 flex-1 flex flex-col items-center justify-center p-4">
-                <NeedlePieChart data={DATA2} needleValue={data.profitLoss * 50 / data.target + 50} />
-                <h3 className="font-semibold">P & L</h3>
+                <NeedlePieChart data={theme == "dark" ? DATA2Dark :  DATA2} needleColor={theme == "dark" ? needleDark : needleLight} needleValue={data.profitLoss * 50 / data.target + 50} />
+                <h3 className="font-semibold text-sm">P & L</h3>
                 <h3 className="font-semibold">${to2dp(data.profitLoss)}</h3>
               </Card>
 

@@ -10,6 +10,7 @@ interface PieChartData{
 interface PieChartProps{
   data: PieChartData[],
   needleValue: number,
+  needleColor: string,
 }
 
 const RADIAN = Math.PI / 180;
@@ -24,7 +25,7 @@ const cy = 70;
 const iR = 35;
 const oR = 75;
 
-const needle = (value:number) => {
+const needle = (value:number, color: string) => {
   let total = 0;
   data.forEach((v) => {
     total += v.value;
@@ -44,14 +45,15 @@ const needle = (value:number) => {
   const yp = y0 + length * sin;
 
   return [
-    <circle cx={x0} cy={y0} r={r} fill={"#000000'"} stroke="none" />,
-    <path d={`M${xba} ${yba}L${xbb} ${ybb} L${xp} ${yp} L${xba} ${yba}`} stroke="#none" fill={"#000000"} />,
+    <circle cx={x0} cy={y0} r={r} fill={color} stroke="none" />,
+    <path d={`M${xba} ${yba}L${xbb} ${ybb} L${xp} ${yp} L${xba} ${yba}`} stroke="#none" fill={color} />,
   ];
 };
 
 export default class Example extends PureComponent<PieChartProps> {
   render() {
-    const { data, needleValue } = this.props;
+    const { data, needleValue, needleColor } = this.props;
+    
 
     return (
       <PieChart width={150} height={80}>
@@ -71,7 +73,7 @@ export default class Example extends PureComponent<PieChartProps> {
             <Cell key={`cell-${index}`} fill={entry.color} />
           ))}
         </Pie>
-        {needle(needleValue)}
+        {needle(needleValue, needleColor)}
       </PieChart>
     );
   }

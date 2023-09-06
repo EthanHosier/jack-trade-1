@@ -42,7 +42,7 @@ export const columns: ColumnDef<Trade>[] = [
   {
     accessorKey: "tradeStatus",
     header: "Trade Status",
-    cell: ({row}) => <p className={row.original.tradeStatus == "Awaiting Fill" ? "text-orange-500" : "text-green-600"}>{row.original.tradeStatus}</p>
+    cell: ({row}) => <p className={`font-semibold ${row.original.tradeStatus == "Awaiting Fill" ? "text-orange-400" : "text-green-600"} `}>{row.original.tradeStatus}</p>
   },
   {
     accessorKey: "position",

@@ -50,7 +50,7 @@ const ResetProfitLossButton = () => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction className='bg-destructive hover:bg-destructive/80' onClick={onReset}>Reset</AlertDialogAction>
+          <AlertDialogAction className='bg-destructive hover:bg-destructive/80 text-destructive-foreground' onClick={onReset}>Reset</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

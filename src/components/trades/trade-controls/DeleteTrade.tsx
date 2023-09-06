@@ -46,7 +46,7 @@ const DeleteTrade = ({ id }: { id: string }) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction className="bg-destructive" onClick={onClick}>Delete Trade</AlertDialogAction>
+          <AlertDialogAction className="bg-destructive hover:bg-destructive/80 text-destructive-foreground" onClick={onClick}>Delete Trade</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

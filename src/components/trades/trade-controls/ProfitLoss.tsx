@@ -79,7 +79,7 @@ const ProfitLoss = ({numOfContracts, tickSize, id}:{numOfContracts: number, tick
 
   return (
     < AlertDialog >
-      <AlertDialogTrigger disabled={numOfContracts == 0}><Check color={!numOfContracts ? "#dddddd" : "green"} /></AlertDialogTrigger>
+      <AlertDialogTrigger disabled={numOfContracts == 0}><Check className={!numOfContracts ? "text-secondary" : "text-green-500"}/></AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Profit / Loss</AlertDialogTitle>
