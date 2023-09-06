@@ -9,6 +9,7 @@ interface PieChartData{
 
 interface PieChartProps{
   data: PieChartData[],
+  needleValue: number,
 }
 
 const RADIAN = Math.PI / 180;
@@ -22,9 +23,8 @@ const cx = 70;
 const cy = 70;
 const iR = 35;
 const oR = 75;
-const value = 50;
 
-const needle = () => {
+const needle = (value:number) => {
   let total = 0;
   data.forEach((v) => {
     total += v.value;
@@ -51,7 +51,7 @@ const needle = () => {
 
 export default class Example extends PureComponent<PieChartProps> {
   render() {
-    const { data } = this.props;
+    const { data, needleValue } = this.props;
 
     return (
       <PieChart width={150} height={80}>
@@ -71,7 +71,7 @@ export default class Example extends PureComponent<PieChartProps> {
             <Cell key={`cell-${index}`} fill={entry.color} />
           ))}
         </Pie>
-        {needle()}
+        {needle(needleValue)}
       </PieChart>
     );
   }

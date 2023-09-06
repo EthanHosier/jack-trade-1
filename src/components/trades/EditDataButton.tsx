@@ -14,13 +14,17 @@ import { useEffect, useState } from "react"
 import { Data } from "../../App"
 import { Skeleton } from "../ui/skeleton"
 import { useToast } from "@/components/ui/use-toast"
-import { doc, setDoc } from "firebase/firestore"
+import { doc, updateDoc } from "firebase/firestore"
 import { db } from "@/firebase/config"
 
 const EditDataButton = ({data}: {data: Data | null }) => {
   const [newBalance, setNewBalance] = useState<string| undefined>(data?.currentBalance.toString());
   const [target, setTarget] = useState<string | undefined>(data?.target.toString());
-  
+  const [maxRisk, setMaxRisk] = useState<string | undefined>(data?.maxRiskPerTrade.toString());
+  const [percentDailyRisk, setPercentDailyRisk] = useState<string | undefined>(data?.percentDailyRisk.toString());
+
+  console.log(data);
+
   const { toast } = useToast()
 
   const reset = () => {
@@ -47,12 +51,34 @@ const EditDataButton = ({data}: {data: Data | null }) => {
       setTarget(newValue);
     }
   }
+
+  const onMaxRiskChange = (event: any) => {
+    const newValue = event.target.value;
+
+    const validNumberRegex = /^-?\d*\.?\d*$/;
+    if (validNumberRegex.test(newValue)) {
+      // The input is a valid number, update the state
+      setMaxRisk(newValue);
+    }
+  }
+
+  const onPercentDailyRiskChange = (event: any) => {
+    const newValue = event.target.value;
+
+    const validNumberRegex = /^-?\d*\.?\d*$/;
+    if (validNumberRegex.test(newValue)) {
+      // The input is a valid number, update the state
+      setPercentDailyRisk(newValue);
+    }
+  }
  
 
   const onSubmit = () => {
-    setDoc(doc(db, "data", "1"), {
+    updateDoc(doc(db, "data", "1"), {
       currentBalance: Number(newBalance), 
       target: Number(target),
+      maxRiskPerTrade: Number(maxRisk),
+      percentDailyRisk: Number(percentDailyRisk),
     }).then(() => 
       toast({
         title: "Data Updated.",
@@ -72,6 +98,8 @@ const EditDataButton = ({data}: {data: Data | null }) => {
   useEffect(() => {
     setNewBalance(data?.currentBalance.toString());
     setTarget(data?.target.toString());
+    setMaxRisk(data?.maxRiskPerTrade.toString());
+    setPercentDailyRisk(data?.percentDailyRisk.toString());
   },[data])
 
   return (
@@ -99,10 +127,24 @@ const EditDataButton = ({data}: {data: Data | null }) => {
             <Input className="flex-1" type="text" value={target} name="quantity" onChange={onTargetChange} />
           </div>
 
+          <div className="flex gap-4 items-center">
+            <h2 className=" w-36">
+              Max Risk / Trade ($)
+            </h2>
+            <Input className="flex-1" type="text" value={maxRisk} name="quantity" onChange={onMaxRiskChange} />
+          </div>
+
+          <div className="flex gap-4 items-center">
+            <h2 className=" w-36">
+              Daily Risk (%)
+            </h2>
+            <Input className="flex-1" type="text" value={percentDailyRisk} name="quantity" onChange={onPercentDailyRiskChange} />
+          </div>
+
         </AlertDialogHeader>
         <AlertDialogFooter className="mt-4">
           <AlertDialogCancel onClick={reset}>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onSubmit} disabled={(!newBalance && newBalance != "0") || !target}>Save Changes</AlertDialogAction>
+          <AlertDialogAction onClick={onSubmit} disabled={(!newBalance && newBalance != "0") || !target || !maxRisk || !percentDailyRisk}>Save Changes</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -1,17 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Check, Pen } from "lucide-react"
 import DeleteTrade from "@/components/trades/trade-controls/DeleteTrade"
+import Position from "@/components/trades/trade-controls/Position"
+import ProfitLoss from "@/components/trades/trade-controls/ProfitLoss"
+import { MARKETS } from "@/lib/constants"
 
 export type Trade = {
   id: string
@@ -19,7 +10,7 @@ export type Trade = {
   market: string,
   stopSize: number,
   risk: number,
-  tradeStatus: "Awaiting Fill" | "Completed idk",
+  tradeStatus: "Awaiting Fill" | "Live",
   position: string,
   plusMinus: number,
 }
@@ -51,53 +42,36 @@ export const columns: ColumnDef<Trade>[] = [
   {
     accessorKey: "tradeStatus",
     header: "Trade Status",
+    cell: ({row}) => <p className={row.original.tradeStatus == "Awaiting Fill" ? "text-orange-500" : "text-green-600"}>{row.original.tradeStatus}</p>
   },
   {
-    accessorKey: "plusMinus",
+    accessorKey: "position",
+    header: "Position",
+    cell: ({row}) => {
+      if(row.original.position) return row.original.position;
+
+      return (
+        <Position id={row.original.id}/>
+      )
+    }
+  },
+  {
+    accessorKey: "",
     header: "+/-",
   },
   {
     id: "actions",
     header: "Trade Controls",
     cell: ({ row }) => {
+      const foundMarket = MARKETS.find(m => m.name == row.original.market);
+
+      if(foundMarket == null) return <p>Invalid Market</p>
+
       return (
         <div className="flex gap-4 w-full">
 
-          {/* TICK */}
-          <AlertDialog>
-            <AlertDialogTrigger><Check color="green"/></AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Tick thing</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Idk
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Continue</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-
+          <ProfitLoss numOfContracts={+row.original.position} tickSize={foundMarket.tick} id={row.original.id}/>
           <DeleteTrade id={row.original.id}/>
-
-          {/* Pen */}
-          <AlertDialog>
-            <AlertDialogTrigger><Pen className="text-secondary-foreground"/></AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Edit Trade</AlertDialogTitle>
-                <AlertDialogDescription>
-                  idk
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Continue</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
 
         </div>
       )

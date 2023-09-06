@@ -50,7 +50,6 @@ const AddTradeButton = () => {
     addDoc(collection(db, "trades"), {
       stopSize: Number(stopSize),
       market,
-      status: "Awaiting Fill",
     }).then(() =>
       toast({
         title: "Trade Added",

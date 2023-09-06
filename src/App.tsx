@@ -1,4 +1,4 @@
-import { Award, CandlestickChart } from "lucide-react"
+import { Award, Banknote, CandlestickChart, DollarSign } from "lucide-react"
 
 import { Skeleton } from "@/components/ui/skeleton"
 import { DataTable } from "./data-table/data-table"
@@ -20,6 +20,7 @@ import {
 
 import NeedlePieChart from "./components/trades/NeedlePieChart";
 import { MARKETS } from "./lib/constants";
+import ResetProfitLossButton from "./components/trades/ResetProfitLossButton";
 
 const DATA1 = [
   { name: 'A', value: 25, color: '#eeeeee' }, // White
@@ -39,12 +40,20 @@ const DATA2 = [
 export interface Data {
   currentBalance: number,
   target: number,
+  maxRiskPerTrade: number,
+  profitLoss: number,
+  wins: number,
+  losses: number,
+  priceAccumulator: number,
+  percentDailyRisk: number,
 }
 
 function App() {
 
   const [data, setData] = useState<Data | null>(null);
   const [trades, setTrades] = useState<Trade[] | null>(null);
+
+  const [allocatedRisk, setAllocatedRisk] = useState<number | null>(null);
 
   useEffect(() => {
     //data
@@ -66,8 +75,8 @@ function App() {
           market: data.market,
           stopSize: data.stopSize,
           risk: 0,
-          tradeStatus: data.status,
-          position: "",
+          tradeStatus: data.position ? "Live" : "Awaiting Fill",
+          position: data.position ?? "",
           plusMinus: 0,
         }
 
@@ -83,12 +92,28 @@ function App() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!trades) return;
+
+    const ar = trades.reduce((acc, trade: Trade) => {
+      const foundMarket = MARKETS.find(m => m.name === trade.market);
+
+      if (!foundMarket || !trade.position) return acc;
+
+
+      return acc + +trade.position * foundMarket.tick;
+    }
+      , 0);
+
+    setAllocatedRisk(ar);
+  }, [trades])
+
   return (
     <Card className="min-h-full m-4 p-4 xl:p-8 max-w-[1200px] lg:mx-auto">
 
       <div className="flex justify-between">
         <div className="mr-16">
-          <h1 className="text-xl font-semibold">Add Trade</h1>
+          <h1 className="text-xl font-semibold">Trade Tracker</h1>
 
           <div className="flex items-center mt-4 gap-4">
 
@@ -99,24 +124,45 @@ function App() {
           </div>
         </div>
 
-        <Card className="flex-1 max-w-[300px]">
-          <CardHeader>
-            <CardTitle className='text-sm font-normal'>
-              <div className='flex justify-between items-center'>
-                <p>Total Balance</p>
-                <CandlestickChart size={16} />
-              </div>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {
-              data ?
-                <p className='text-2xl -mt-5 font-semibold text-primary'>${data?.currentBalance}</p>
-                :
-                <Skeleton className="-mt-5 w-24 h-8" />
-            }
-          </CardContent>
-        </Card>
+        <div className="flex flex-1 gap-4 justify-end">
+          <Card className="flex-1 max-w-[300px]">
+            <CardHeader>
+              <CardTitle className='text-sm font-normal'>
+                <div className='flex justify-between items-center'>
+                  <p>Total Balance</p>
+                  <DollarSign size={16} />
+                </div>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {
+                data ?
+                  <p className='text-2xl -mt-5 font-semibold text-primary'>${to2dp(data?.currentBalance)}</p>
+                  :
+                  <Skeleton className="-mt-5 w-24 h-8" />
+              }
+            </CardContent>
+          </Card>
+
+          <Card className="flex-1 max-w-[300px] hidden md:block">
+            <CardHeader>
+              <CardTitle className='text-sm font-normal'>
+                <div className='flex justify-between items-center'>
+                  <p>Total Risk</p>
+                  <CandlestickChart size={16} />
+                </div>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {
+                data ?
+                  <p className='text-2xl -mt-5 font-semibold text-primary'>${to2dp(data?.currentBalance * data.percentDailyRisk / 100)}</p>
+                  :
+                  <Skeleton className="-mt-5 w-24 h-8" />
+              }
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
 
@@ -131,7 +177,7 @@ function App() {
 
       <div className="mt-8 flex items-center gap-2">
         <div className="flex-1 h-2 rounded-full bg-secondary">
-          <div className="h-full bg-primary w-[75%] rounded-full" />
+          {data && data.profitLoss > 0 && <div className="h-full bg-primary rounded-full" style={{ width: `${Math.min(100, data.profitLoss * 100 / data.target)}%` }} />}
         </div>
         <div className="flex items-center w-24 h-2"><Award className="mr-1" size={20} strokeWidth={1.8} /> {data ? <p>${to2dp(data.target)}</p> : <Skeleton className="flex-1 h-[20px] rounded-full" />}</div>
       </div>
@@ -144,17 +190,17 @@ function App() {
               <Card className="p-4 text-sm w-full md:w-64 items-center flex-1">
                 <div className="flex gap-4 mb-2 justify-center">
                   <p className="  w-36">Realised P & L</p>
-                  <p className="  w-12 text-center">$0.00</p>
+                  <p className="  w-12 text-center">${to2dp(data.profitLoss)}</p>
                 </div>
 
                 <div className="flex gap-4 mb-2 justify-center">
                   <p className="  w-36">Price Accumulator</p>
-                  <p className="  w-12 text-center">0</p>
+                  <p className="  w-12 text-center">{data.priceAccumulator}</p>
                 </div>
 
                 <div className="flex gap-4 mb-2 justify-center">
                   <p className="  w-36">Allocated Risk</p>
-                  <p className="  w-12 text-center">$0.00</p>
+                  <p className="  w-12 text-center">${allocatedRisk}</p>
                 </div>
 
                 <div className="flex gap-4 mb-2 justify-center">
@@ -165,21 +211,21 @@ function App() {
               </Card>
 
               <Card className="md:w-56 flex-1 flex flex-col items-center justify-center p-4">
-                <NeedlePieChart data={DATA1} />
+                <NeedlePieChart data={DATA1} needleValue={100 * (data.currentBalance * data.percentDailyRisk / 100 - (allocatedRisk ?? 0)) / (data.currentBalance * data.percentDailyRisk / 100)} />
                 <h3 className="font-semibold">Available Risk</h3>
-                <h3 className="font-semibold">$xx.xx</h3>
+                <h3 className="font-semibold">${to2dp(data.currentBalance * data.percentDailyRisk / 100 - (allocatedRisk ?? 0))}</h3>
               </Card>
 
               <Card className="md:w-56 flex-1 flex flex-col items-center justify-center p-4">
-                <NeedlePieChart data={DATA1} />
+                <NeedlePieChart data={DATA1} needleValue={data.losses || data.wins ? data.wins * 100 / (data.wins + data.losses) : 100} />
                 <h3 className="font-semibold">Win Ratio</h3>
-                <h3 className="font-semibold">100%</h3>
+                <h3 className="font-semibold">{data.losses || data.wins ? to2dp(data.wins * 100 / (data.wins + data.losses)) : 100}%</h3>
               </Card>
 
               <Card className="md:w-56 flex-1 flex flex-col items-center justify-center p-4">
-                <NeedlePieChart data={DATA2} />
+                <NeedlePieChart data={DATA2} needleValue={data.profitLoss * 50 / data.target + 50} />
                 <h3 className="font-semibold">P & L</h3>
-                <h3 className="font-semibold">$xx.xx</h3>
+                <h3 className="font-semibold">${to2dp(data.profitLoss)}</h3>
               </Card>
 
             </>
@@ -187,18 +233,13 @@ function App() {
             :
 
             <>
-              {[...new Array(4)].map((_,i) => <Skeleton key={i} className="flex-1 md:w-56 h-40" />)}              
+              {[...new Array(4)].map((_, i) => <Skeleton key={i} className="flex-1 md:w-56 h-40" />)}
             </>
-
-
         }
-
-
-
-
 
       </div>
 
+      <ResetProfitLossButton />
 
 
     </Card>
